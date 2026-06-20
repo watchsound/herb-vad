@@ -36,11 +36,16 @@ htmlcov/
 # Jupyter
 .ipynb_checkpoints/
 
-# DVC
-/data/raw/
-/data/interim/
-/data/processed/
-/data/external/
+# DVC / data directories — ignore all contents but keep .gitkeep sentinels
+# so the empty directory structure is tracked. Order matters: re-include
+# subdirectories themselves so git descends into them, then re-include only
+# the .gitkeep files inside.
+/data/raw/**
+/data/interim/**
+/data/processed/**
+/data/external/**
+!/data/raw/*/
+!**/.gitkeep
 *.dvc
 .dvc/cache
 .dvc/tmp
