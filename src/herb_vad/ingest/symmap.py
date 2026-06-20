@@ -48,6 +48,8 @@ FLAVOR_MAP: dict[str, str] = {
 
 QI_MAP: dict[str, str] = {
     "hot": "hot",
+    "extreme hot": "hot",
+    "extremely hot": "hot",
     "warm": "warm",
     "mild warm": "warm",
     "slightly warm": "warm",
@@ -61,6 +63,8 @@ QI_MAP: dict[str, str] = {
     "mild cold": "cool",
     "slightly cold": "cool",
     "cold": "cold",
+    "extreme cold": "cold",
+    "extremely cold": "cold",
 }
 
 TOX_MAP: dict[str, str] = {
