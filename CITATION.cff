@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+title: "Herb-VAD: Cognitive cartography of classical Chinese-medicine herb descriptors"
+message: "If you use this software, please cite the project as below."
+type: software
+authors:
+  - name: "Herb-VAD contributors"
+repository-code: "https://github.com/watchsound/herb-vad"
+license: MIT
+version: 0.1.0
+date-released: "2026-06-20"
+keywords:
+  - traditional-chinese-medicine
+  - cognitive-science
+  - embodied-cognition
+  - vad-affective-model
+  - dimensional-affect
+abstract: >
+  Empirically tests whether the classical TCM herb descriptors
+  (四气/五味/升降浮沉/归经/毒性) form a recoverable low-dimensional
+  coordinate system over interoceptive-cognitive space, applying the
+  NLP-VAD methodological protocol and cross-walking the recovered
+  space with the NLP affective space via shared multilingual embeddings.
