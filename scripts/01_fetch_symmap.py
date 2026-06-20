@@ -1,33 +1,55 @@
 """Fetch & parse SymMap herb properties.
 
-SymMap (http://www.symmap.org/) requires a manual download of the SMHB
-table from the public Download page; an automated scrape is brittle and
-the data is small (~1 MB). Place the downloaded TSV at
-``data/raw/symmap/SMHB.tsv`` (the column header must contain at least
-SMHB_ID, Chinese_name, Pinyin_name, Latin_name, Property, Flavor,
-Meridian, Toxicity).
+SymMap v2.0 (http://www.symmap.org/, Wu et al. 2019) distributes the
+herb table as ``SMHB.xlsx`` from the public Download page. This script:
 
-This script then parses it and writes ``data/interim/symmap.parquet``.
+1. Downloads ``SMHB.xlsx`` to ``data/raw/symmap/`` if not already present.
+2. Converts it to ``SMHB.tsv`` (needs ``openpyxl``).
+3. Runs the canonical parser → ``data/interim/symmap.parquet``.
+
+If you've already placed ``SMHB.tsv`` in ``data/raw/symmap/`` by hand,
+steps 1 and 2 are skipped.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
+from urllib.request import urlopen
 
 from herb_vad.ingest.symmap import parse_symmap_herbs
 
-RAW = Path("data/raw/symmap/SMHB.tsv")
+XLSX_URL = "http://www.symmap.org/static/download/V2.0/" "SymMap%20v2.0%2C%20SMHB%20file.xlsx"
+XLSX = Path("data/raw/symmap/SMHB.xlsx")
+TSV = Path("data/raw/symmap/SMHB.tsv")
 OUT = Path("data/interim/symmap.parquet")
 
 
+def _download_xlsx() -> None:
+    XLSX.parent.mkdir(parents=True, exist_ok=True)
+    print(f"Downloading {XLSX_URL} -> {XLSX} ...")
+    with urlopen(XLSX_URL, timeout=120) as resp, XLSX.open("wb") as fh:
+        fh.write(resp.read())
+    print(f"Wrote {XLSX} ({XLSX.stat().st_size} bytes)")
+
+
+def _convert_xlsx_to_tsv() -> None:
+    try:
+        import pandas as pd
+    except ImportError as e:
+        raise SystemExit("pandas required for XLSX conversion") from e
+    print(f"Converting {XLSX} -> {TSV} (requires openpyxl) ...")
+    df = pd.read_excel(XLSX)
+    df.to_csv(TSV, sep="\t", index=False)
+    print(f"Wrote {TSV}: {df.shape[0]} rows x {df.shape[1]} cols")
+
+
 def main() -> None:
-    if not RAW.exists():
-        raise SystemExit(
-            f"Missing {RAW}. Download SMHB.tsv from http://www.symmap.org/download/ "
-            "and place it there before running this script."
-        )
+    if not TSV.exists():
+        if not XLSX.exists():
+            _download_xlsx()
+        _convert_xlsx_to_tsv()
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    df = parse_symmap_herbs(RAW)
+    df = parse_symmap_herbs(TSV)
     df.write_parquet(OUT)
     axes = sorted(df["axis"].unique().to_list())
     print(f"Wrote {OUT}: {df.height} rows over axes {axes}")
