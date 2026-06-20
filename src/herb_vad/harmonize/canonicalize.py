@@ -11,13 +11,30 @@ from herb_vad.identity.normalize import (
 )
 
 
+def _unique_key_table(master: pl.DataFrame, key: str) -> pl.DataFrame:
+    """Build a join table that maps a normalized key to a canonical_id.
+
+    Only keeps key values that appear in EXACTLY ONE master row — keys
+    that collide across multiple canonical_ids (e.g. ``latin_norm
+    = "radix"`` after over-aggressive authority stripping) would
+    otherwise multiply property rows by the collision count when used
+    as a join key.
+    """
+    counts = master.group_by(key).agg(pl.len().alias("_n"))
+    unique_keys = counts.filter((pl.col("_n") == 1) & (pl.col(key) != "")).drop("_n")
+    return master.join(unique_keys, on=key, how="inner").select(["canonical_id", key])
+
+
 def join_to_canonical(long: pl.DataFrame, master: pl.DataFrame) -> pl.DataFrame:
     """Add a ``canonical_id`` column to each long-format property row.
 
     Rows that do not match any master herb are dropped. The match is
-    on (chinese_norm OR pinyin_norm OR latin_norm) — any single normalized
-    field is enough, but only one canonical row may match (master is
-    already deduplicated by Task 12).
+    on (chinese_norm OR pinyin_norm OR latin_norm) — any single
+    UNIQUE-IN-MASTER normalized field is enough. Keys that collide
+    across multiple master rows (e.g. ``"radix"`` from over-stripped
+    Latin authorities) are excluded from join consideration to prevent
+    Cartesian fanout; the source row will fall back to whichever of the
+    other two keys is unique.
     """
     enriched = long.with_columns(
         pl.col("chinese")
@@ -27,11 +44,9 @@ def join_to_canonical(long: pl.DataFrame, master: pl.DataFrame) -> pl.DataFrame:
         pl.col("latin").map_elements(normalize_latin, return_dtype=pl.Utf8).alias("latin_norm"),
     )
 
-    by_chinese = master.select(["canonical_id", "chinese_norm"]).filter(
-        pl.col("chinese_norm") != ""
-    )
-    by_pinyin = master.select(["canonical_id", "pinyin_norm"]).filter(pl.col("pinyin_norm") != "")
-    by_latin = master.select(["canonical_id", "latin_norm"]).filter(pl.col("latin_norm") != "")
+    by_chinese = _unique_key_table(master, "chinese_norm")
+    by_pinyin = _unique_key_table(master, "pinyin_norm")
+    by_latin = _unique_key_table(master, "latin_norm")
 
     joined = enriched
     for keys, table in (

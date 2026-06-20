@@ -38,6 +38,58 @@ def label_matrix(long: pl.DataFrame, *, axis: str) -> tuple[np.ndarray, list[str
     return matrix, herb_ids, classes
 
 
+def raw_agreement_per_axis(long: pl.DataFrame, *, min_sources: int = 2) -> pl.DataFrame:
+    """Fraction of herbs whose sources agree per axis.
+
+    For every axis and every canonical herb covered by ``>=
+    min_sources`` independent sources, we ask: did every source emit
+    the same value-set for this herb on this axis? Single-valued
+    axes (QI / DIRECTION / TOXICITY) test strict equality. Multi-
+    valued axes (FLAVOR / CHANNEL) test equality of the value sets
+    (Jaccard = 1). Robust to ragged rater coverage in a way that
+    statsmodels' Fleiss-kappa is not.
+
+    Columns: ``axis``, ``n_herbs_eligible``, ``n_herbs_agree``,
+    ``raw_agreement`` (the headline number, in [0, 1]).
+    """
+    results: list[dict[str, object]] = []
+    for axis in sorted(long["axis"].unique().to_list()):
+        sub = long.filter(pl.col("axis") == axis)
+        per_herb_source = sub.group_by(["canonical_id", "source"]).agg(
+            pl.col("value").unique().alias("vs")
+        )
+        per_herb = per_herb_source.group_by("canonical_id").agg(
+            pl.col("vs").alias("source_value_sets"),
+            pl.col("source").n_unique().alias("n_sources"),
+        )
+        eligible = per_herb.filter(pl.col("n_sources") >= min_sources)
+        n_eligible = eligible.height
+        if n_eligible == 0:
+            continue
+        n_agree = 0
+        for r in eligible.iter_rows(named=True):
+            sets = [frozenset(s) for s in r["source_value_sets"]]
+            if len(set(sets)) == 1:
+                n_agree += 1
+        results.append(
+            {
+                "axis": axis,
+                "n_herbs_eligible": n_eligible,
+                "n_herbs_agree": n_agree,
+                "raw_agreement": n_agree / n_eligible,
+            }
+        )
+    return pl.DataFrame(
+        results,
+        schema={
+            "axis": pl.Utf8,
+            "n_herbs_eligible": pl.Int64,
+            "n_herbs_agree": pl.Int64,
+            "raw_agreement": pl.Float64,
+        },
+    )
+
+
 def fleiss_per_axis(long: pl.DataFrame, *, min_raters: int = 2, min_herbs: int = 2) -> pl.DataFrame:
     """Compute Fleiss' kappa per axis present in ``long``.
 

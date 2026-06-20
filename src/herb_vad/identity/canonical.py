@@ -54,17 +54,35 @@ def _merge_clusters(rows: list[dict]) -> list[dict]:
     return clusters
 
 
+_STRICT_AXES = ("chinese_norm", "pinyin_norm")
+
+
 def _can_merge(cluster: dict, row: dict) -> bool:
+    """Greedy cluster merge with a strict/loose axis split.
+
+    Strict axes (chinese_norm, pinyin_norm): a non-empty value on both
+    sides MUST match. Mismatches reject the merge.
+
+    Loose axes (latin_norm): mismatches are tolerated because Latin
+    binomials in TCM sources are notoriously noisy (pharmacognosy
+    prefixes "Radix"/"Folium"/"Fructus", citations with brackets,
+    multi-form comma lists). A Latin match counts as positive overlap
+    but a Latin mismatch alone never blocks a merge that pinyin or
+    chinese already supports.
+
+    A merge succeeds iff (a) no strict-axis mismatch AND (b) at least
+    one axis (strict or loose) has a non-empty shared value.
+    """
     overlap = False
-    for axis in ("chinese_norm", "pinyin_norm", "latin_norm"):
-        if row[axis]:
-            if cluster[axis]:
-                if row[axis] in cluster[axis]:
-                    overlap = True
-                else:
-                    return False
-            # else: cluster has no opinion on this axis — neither match
-            # nor mismatch; keep checking the other axes.
+    for axis in _STRICT_AXES:
+        if row[axis] and cluster[axis]:
+            if row[axis] in cluster[axis]:
+                overlap = True
+            else:
+                return False
+    if row["latin_norm"] and cluster["latin_norm"]:
+        if row["latin_norm"] in cluster["latin_norm"]:
+            overlap = True
     return overlap
 
 
