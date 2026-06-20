@@ -1,0 +1,6 @@
+Herb_ID	Herb_pinyin_name	Herb_cn_name	Herb_en_name	Properties	Flavors	Meridians	Toxicity
+HERB000001	Renshen	人参	Ginseng	温	甘、微苦	脾、肺、心	无毒
+HERB000002	Banxia	半夏	Pinellia	温	辛	脾、胃、肺	有毒
+HERB000003	Mahuang	麻黄	Ephedra	温	辛、微苦	肺、膀胱	小毒
+HERB000004	Maxingshigan	杏仁	Bitter apricot kernel	微温	苦	肺、大肠	小毒
+HERB000005	Cangerzi	苍耳子	Xanthium	温	辛、苦	肺	有毒
