@@ -1,0 +1,17 @@
+CHP_ID	Medicinal_properties	Class	x_rank	y_rank
+CHP00001	Sweet medicinal	Medicinal flavor	13	19
+CHP00001	Bitter medicinal	Medicinal flavor	10	13
+CHP00001	Warm therapeutic	Therapeutic nature	1	1
+CHP00001	Lung meridian	Meridian tropism	2	2
+CHP00001	Spleen meridian	Meridian tropism	3	3
+CHP00001	Heart meridian	Meridian tropism	4	4
+CHP00002	Pungent medicinal	Medicinal flavor	1	1
+CHP00002	Sweet medicinal	Medicinal flavor	2	2
+CHP00002	Hot therapeutic	Therapeutic nature	1	1
+CHP00002	Heart meridian	Meridian tropism	1	1
+CHP00002	Kidney meridian	Meridian tropism	2	2
+CHP00003	Pungent medicinal	Medicinal flavor	1	1
+CHP00003	Sweet medicinal	Medicinal flavor	2	2
+CHP00003	Cold therapeutic	Therapeutic nature	1	1
+CHP00003	Lung meridian	Meridian tropism	1	1
+CHP00003	Stomach meridian	Meridian tropism	2	2

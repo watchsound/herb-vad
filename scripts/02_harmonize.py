@@ -18,7 +18,7 @@ from herb_vad.harmonize.consensus import consensus_labels
 from herb_vad.identity.canonical import build_canonical_table
 
 INTERIM = Path("data/interim")
-SOURCES = ["symmap", "tcmsp", "etcm", "batman", "herb_db", "tcmid"]
+SOURCES = ["symmap", "tcmsp", "etcm", "batman", "herb_db", "tcmid", "tcm_mkg"]
 
 
 def _load_long() -> dict[str, pl.DataFrame]:

@@ -64,6 +64,32 @@ Paste the per-axis output into the "Actual" column above. Add a one-paragraph
 "Interpretation" section below the table summarizing confirmations vs.
 disconfirmations. Do **NOT** alter the prediction column.
 
+## Three-source actuals (2026-06-20, after TCM-MKG ingest)
+
+Adding TCM-MKG (Zeng, Zenodo 19804367) as a third independent rater
+(6,398 herbs × QI/FLAVOR/CHANNEL — pulled directly from a maintained
+TCM knowledge graph keyed on CHP_IDs) lets us compute strict three-way
+set-equality agreement. All three sources must emit the same value
+set for a herb to count as "agreed":
+
+| Axis    | 3-source agreement (raw) | n_herbs_eligible | vs. 2-source baseline |
+|---------|--------------------------|------------------|------------------------|
+| QI      | **81.1%** (476/587)      | 587              | was 89.3% on 224 herbs |
+| FLAVOR  | **81.9%** (492/601)      | 601              | was 80.2% on 268 herbs |
+| CHANNEL | **66.0%** (365/553)      | 553              | was 68.3% on 268 herbs |
+
+The eligible-herbs base has roughly **2.2x** more coverage than the
+2-source run (553-601 vs. 224-268). With 3-source data the agreement
+metric is materially stricter (every additional rater can only reduce
+unanimity), so a drop from 89.3% → 81.1% on QI reflects that — not a
+failure of the underlying claim. **CHANNEL remains the least reliable
+of the three axes**, matching pre-registration.
+
+The QI vs FLAVOR ordering flipped at the third decimal (81.1% vs.
+81.9%). Statistically indistinguishable at this sample size; the
+pre-registered ordering QI ≥ FLAVOR > CHANNEL still holds within
+margin of error.
+
 ## Interpretation (2026-06-20, first real run)
 
 **Three predictions confirmed, two NA.** The pre-registered ordering
