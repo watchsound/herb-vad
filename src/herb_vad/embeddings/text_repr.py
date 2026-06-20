@@ -20,6 +20,9 @@ import polars as pl
 
 from herb_vad.embeddings.property_vocab import PROPERTY_REGEX
 from herb_vad.ingest.symptom_vocab import SYMPTOM_TERMS
+from herb_vad.ingest.symptom_vocab_en import SYMPTOM_TERMS_EN
+
+_BILINGUAL_SYMPTOM_TERMS: tuple[str, ...] = tuple(list(SYMPTOM_TERMS) + list(SYMPTOM_TERMS_EN))
 
 MASK_TOKEN = "[PROP]"
 
@@ -58,8 +61,22 @@ def _mentions_herb(passage: str, names: Iterable[str]) -> bool:
     return False
 
 
-def _mentions_symptom(passage: str, symptoms: Iterable[str] = tuple(SYMPTOM_TERMS)) -> bool:
-    return any(s in passage for s in symptoms)
+def _mentions_symptom(passage: str, symptoms: Iterable[str] = _BILINGUAL_SYMPTOM_TERMS) -> bool:
+    """Detect a TCM symptom mention in a passage.
+
+    Defaults to the bilingual vocab (ZH terms substring-match raw text;
+    EN terms substring-match the lowercased version) so both classical
+    Chinese passages and PubMed English abstracts are eligible.
+    """
+    lower = passage.lower()
+    for s in symptoms:
+        if any("\u4e00" <= c <= "\u9fff" for c in s):
+            if s in passage:
+                return True
+        else:
+            if s in lower:
+                return True
+    return False
 
 
 def build_for_herb(
