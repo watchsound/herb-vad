@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PubmedArticleSet>
+  <PubmedArticle>
+    <MedlineCitation>
+      <PMID Version="1">99999991</PMID>
+      <Article>
+        <ArticleTitle>Effect of Ren Shen decoction on fatigue.</ArticleTitle>
+        <Abstract><AbstractText>This study examines ren shen and gan cao for fatigue and 怕冷.</AbstractText></Abstract>
+        <Language>eng</Language>
+      </Article>
+    </MedlineCitation>
+  </PubmedArticle>
+  <PubmedArticle>
+    <MedlineCitation>
+      <PMID Version="1">99999992</PMID>
+      <Article>
+        <ArticleTitle>麻黃在感冒中的作用</ArticleTitle>
+        <Abstract><AbstractText>本研究探讨麻黄治疗咳嗽及鼻塞的效果。</AbstractText></Abstract>
+        <Language>chi</Language>
+      </Article>
+    </MedlineCitation>
+  </PubmedArticle>
+</PubmedArticleSet>
