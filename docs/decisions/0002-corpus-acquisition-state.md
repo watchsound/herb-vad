@@ -84,3 +84,48 @@ without browser interaction.
 - `raw_agreement_per_axis` added as a robust headline metric for
   ragged-rater data.
 - **First real Finding #1 numbers landed** (`docs/findings/01_label_reliability.md`).
+
+## TOXICITY + DIRECTION re-hunt (2026-06-20, post-Finding-#1)
+
+Targeted hunt for the two missing axes:
+
+- **TCM-MKG D1 terminology**: lists 毒性 ("Herbal toxicity") and qi/flavor/channel
+  as recognized property categories. But the D-tables themselves only encode
+  qi/flavor/channel as property rows. 升降浮沉 isn't even listed in the TCM-MKG
+  glossary — Western-influenced English-language TCM databases largely drop it.
+- **ETCM Django API reverse-engineered**: discovered `/home/` endpoint registry
+  on `http://www.tcmip.cn:18124/`. `/home/herb_get_level/` and `/home/browse/`
+  return taxonomic/tree data. `/home/detail/` accepts GET but my param guesses
+  ("data=人参&index_name=etcm_herb" etc.) all return `{"code":2,"msg":"No Data for !"}`.
+  The required parameter shape is in a chunked JS file I didn't fully unpack.
+  Doable with another ~1-2 hours of JS spelunking.
+- **BATMAN downloadApi traced**: separate host `http://batman2.cloudna.cn/`.
+  The JS pattern is `/downloadApiFile/${result_id}` — per-query result downloads,
+  NOT bulk Herb_info. Bulk export requires going through the SPA UI to first
+  execute a search, then download that result. No simple direct URL.
+- **HERB direct endpoint**: confirmed via JS bundle the path is
+  `/download/file/?file_path=static/download_data/HERB_herb_info.txt` — the
+  endpoint validates the path-shape (accepts it) but reports
+  `"Sorry, file_path dose not exists"`. The server-side file is missing.
+- **Zenodo broad search** for "TCM toxic", "TCM ascending/descending",
+  "Chinese pharmacopoeia property": only Zeng's TCM-MKG carries TCM property
+  data. CMAUP is molecular-only. MTCMB is LLM Q&A.
+- **GitHub search** for HERB/BATMAN/SymMap mirrors: only scrapers, no pre-scraped
+  data. Best hit: TCMSP-Spider (44 stars) which is a Python scraper, not data.
+- **Wikidata SPARQL** for TCM herbs with property labels: TCM herb-property
+  axes aren't modeled in Wikidata.
+
+**Net result for TOXICITY**: 91 records in SymMap remain the only live data.
+The 268-herb 2-source eligible base for FLAVOR/CHANNEL drops to single-source
+(91 herbs) for TOXICITY, which doesn't support inter-rater computation.
+
+**Net result for DIRECTION**: still zero records across the live sources.
+The three Zenodo-accessible TCM databases (SymMap, TCMID, TCM-MKG) all drop
+升降浮沉 entirely. No public English-language TCM database covers this axis.
+
+**Realistic paths forward** for each:
+- TOXICITY: browser export from HERB or BATMAN-TCM (5 min user action each).
+  ETCM via `/home/detail/` once the param shape is figured out.
+- DIRECTION: requires a 经方-tradition source. Best candidates: Chinese
+  Pharmacopoeia 2020 (paid PDF, manual extraction), CNKI clinical-text corpus
+  (institutional access), or a sourced extraction from 《中药学》 standard textbook.
