@@ -1,0 +1,62 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Testing / coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# DVC
+/data/raw/
+/data/interim/
+/data/processed/
+/data/external/
+*.dvc
+.dvc/cache
+.dvc/tmp
+.dvc/plots
+
+# Logs / artifacts
+*.log
+logs/
+artifacts/
+runs/
+outputs/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Claude Code working files
+.claude/
