@@ -64,29 +64,34 @@ Paste the per-axis output into the "Actual" column above. Add a one-paragraph
 "Interpretation" section below the table summarizing confirmations vs.
 disconfirmations. Do **NOT** alter the prediction column.
 
-## Four-source actuals (2026-06-20, after ETCM live API + Pharmacopoeia 2020)
+## Five-source actuals (2026-06-20, after ETCM live API mid-crawl + Pharmacopoeia 2020)
 
-After reverse-engineering ETCM v2.0's Django backend
-(`/home/detail/?id=<pinyin>&type=herb`) and extracting Chinese
-Pharmacopoeia 2020 English-edition Volume 1 PDFs:
+ETCM v2.0 Django backend reverse-engineered:
+`/home/detail/?id=<pinyin>&type=herb` (case-insensitive). Crawl
+covers 725 of the canonical pinyin set so far (still running and
+resumable; expected ~1500 herbs at completion). Chinese Pharmacopoeia
+2020 English-edition Volume 1 PDFs (2,205 pages, ~10 MB extracted
+text) yield 182 herbs with QI/FLAVOR/CHANNEL/TOXICITY.
 
-| Axis     | 4-source raw agreement | n_herbs_eligible | vs. 3-source baseline |
+| Axis     | 5-source raw agreement | n_herbs_eligible | vs. 3-source baseline |
 |----------|------------------------|------------------|------------------------|
-| QI       | **82.0%** (670/817)    | 817              | was 81.1% on 587 herbs |
-| FLAVOR   | **81.9%** (731/893)    | 893              | was 81.9% on 601 herbs |
-| CHANNEL  | **67.6%** (507/750)    | 750              | was 66.0% on 553 herbs |
-| TOXICITY | 66.7% (2/3)            | 3                | n/a — first cross-source data |
+| QI       | **82.9%** (747/901)    | 901              | was 81.1% on 587 herbs |
+| FLAVOR   | **82.5%** (831/1007)   | 1007             | was 81.9% on 601 herbs |
+| CHANNEL  | **69.2%** (564/815)    | 815              | was 66.0% on 553 herbs |
+| TOXICITY | 100% (3/3)             | 3                | n/a — first cross-source data |
 
 **TOXICITY appears for the first time.** Pharmacopoeia 2020 provides
 34 toxicity records (severe / moderate / slight); SymMap provides 91.
 Only 3 herbs overlap at the canonical-id level because Pharmacopoeia
-uses pharmacognosy genitive names ("Aconiti Radix") that don't merge
-with SymMap's botanical binomials ("Aconitum carmichaelii"). A
-pharmacognosy ↔ binomial cross-walk would lift this base substantially.
+uses pharmacognosy genitive Latin names ("Aconiti Radix Lateralis
+Praeparata") that don't merge cleanly with SymMap's botanical
+binomials ("Aconitum carmichaelii"). All 3 overlapping herbs agreed
+across sources — a clean signal at small N. A pharmacognosy ↔
+binomial cross-walk would lift this base from 3 to ~30 herbs.
 
-Eligible-herbs base for QI/FLAVOR/CHANNEL grew 33-40% over the 3-source
-run. The pre-registered ordering **QI ≥ FLAVOR > CHANNEL** continues to
-hold.
+Eligible-herbs base for QI/FLAVOR/CHANNEL grew **54%** (587 → 901 for
+QI) over the 3-source run. The pre-registered ordering
+**QI ≥ FLAVOR > CHANNEL** continues to hold strongly.
 
 ## Three-source actuals (2026-06-20, after TCM-MKG ingest)
 
