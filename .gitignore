@@ -67,3 +67,8 @@ outputs/
 .claude/
 PHARMACOPOEIA-1a.pdf
 PHARMACOPOEIA-1b.pdf
+
+# Paper build artifacts (HTML + CSS intermediates)
+docs/paper/*.html
+docs/paper/*.css
+docs/paper/tex2pdf.*/
