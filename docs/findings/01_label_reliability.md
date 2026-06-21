@@ -64,6 +64,30 @@ Paste the per-axis output into the "Actual" column above. Add a one-paragraph
 "Interpretation" section below the table summarizing confirmations vs.
 disconfirmations. Do **NOT** alter the prediction column.
 
+## Four-source actuals (2026-06-20, after ETCM live API + Pharmacopoeia 2020)
+
+After reverse-engineering ETCM v2.0's Django backend
+(`/home/detail/?id=<pinyin>&type=herb`) and extracting Chinese
+Pharmacopoeia 2020 English-edition Volume 1 PDFs:
+
+| Axis     | 4-source raw agreement | n_herbs_eligible | vs. 3-source baseline |
+|----------|------------------------|------------------|------------------------|
+| QI       | **82.0%** (670/817)    | 817              | was 81.1% on 587 herbs |
+| FLAVOR   | **81.9%** (731/893)    | 893              | was 81.9% on 601 herbs |
+| CHANNEL  | **67.6%** (507/750)    | 750              | was 66.0% on 553 herbs |
+| TOXICITY | 66.7% (2/3)            | 3                | n/a — first cross-source data |
+
+**TOXICITY appears for the first time.** Pharmacopoeia 2020 provides
+34 toxicity records (severe / moderate / slight); SymMap provides 91.
+Only 3 herbs overlap at the canonical-id level because Pharmacopoeia
+uses pharmacognosy genitive names ("Aconiti Radix") that don't merge
+with SymMap's botanical binomials ("Aconitum carmichaelii"). A
+pharmacognosy ↔ binomial cross-walk would lift this base substantially.
+
+Eligible-herbs base for QI/FLAVOR/CHANNEL grew 33-40% over the 3-source
+run. The pre-registered ordering **QI ≥ FLAVOR > CHANNEL** continues to
+hold.
+
 ## Three-source actuals (2026-06-20, after TCM-MKG ingest)
 
 Adding TCM-MKG (Zeng, Zenodo 19804367) as a third independent rater

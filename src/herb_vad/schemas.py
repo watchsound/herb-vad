@@ -78,7 +78,17 @@ class CanonicalHerb(BaseModel):
 
 class HerbPropertyRecord(BaseModel):
     canonical_id: str
-    source: Literal["symmap", "tcmsp", "etcm", "batman", "herb_db", "tcmid", "tcm_mkg", "classical"]
+    source: Literal[
+        "symmap",
+        "tcmsp",
+        "etcm",
+        "batman",
+        "herb_db",
+        "tcmid",
+        "tcm_mkg",
+        "pharmacopoeia",
+        "classical",
+    ]
     axis: PropertyAxis
     value: str  # validated against the axis-specific enum downstream
     confidence: float = 1.0
