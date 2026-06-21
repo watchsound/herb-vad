@@ -1,0 +1,17 @@
+{
+  "code": 1,
+  "msg": "success!!",
+  "data": [
+    {
+      "key": "Basic Information",
+      "id": "base_information",
+      "value": [
+        {"key": "Herb Name in Pinyin", "value": "FuZi"},
+        {"key": "Herb Name in Latin", "value": "<i>Aconitum carmichaelii Debx</i>"},
+        {"key": "Property", "value": "Great hot"},
+        {"key": "Flavor", "value": "Pungent, Sweet"},
+        {"key": "Meridian Tropism", "value": "Heart meridian, Kidney meridian, Spleen meridian"}
+      ]
+    }
+  ]
+}

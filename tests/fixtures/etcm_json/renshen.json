@@ -1,0 +1,19 @@
+{
+  "code": 1,
+  "msg": "success!!",
+  "data": [
+    {
+      "key": "Basic Information",
+      "id": "base_information",
+      "value": [
+        {"key": "Herb Name in Pinyin", "value": "RenShen"},
+        {"key": "Herb Name in Latin", "value": "<i>Panax ginseng C. A. Mey.</i>"},
+        {"key": "Family", "value": "Araliaceae"},
+        {"key": "Medicinal Part", "value": "Root"},
+        {"key": "Property", "value": "Mildly warm"},
+        {"key": "Flavor", "value": "Sweet, Mildly bitter"},
+        {"key": "Meridian Tropism", "value": "Spleen meridian, Lung meridian, Heart meridian, Kidney meridian"}
+      ]
+    }
+  ]
+}
